@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 128
+ETag: W/"80-QxxvELj6aBIqlkfVtwTV0zNnn0Y"
+Date: Sun, 04 Oct 2026 04:05:01 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"data":{"id":"EMP-1002","period":"2026-09","gross":7333.33,"tax":1466.67,"net":5866.66,"bankAccount":"SYNTHETIC-ACCOUNT-0002"}}
