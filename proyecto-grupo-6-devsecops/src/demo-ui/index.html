@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101b2d">
+    <title>TalentCorp | Laboratorio de seguridad</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="TalentCorp, inicio">
+        <span class="brand-mark">T</span>
+        <span>TalentCorp<span class="brand-subtitle">LABORATORIO DEVSECOPS</span></span>
+      </a>
+      <nav class="server-switch" aria-label="Cambiar servidor">
+        <a id="vulnerable-link" href="http://127.0.0.1:3000/">API vulnerable <span>3000</span></a>
+        <a id="secure-link" href="http://127.0.0.1:3001/">API segura <span>3001</span></a>
+      </nav>
+    </header>
+
+    <main class="page">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">HR &amp; PAYROLL · ENTORNO LOCAL</p>
+          <h1>Prueba los controles.<br><span>Compara el resultado.</span></h1>
+          <p class="intro">Ejecuta las mismas operaciones en las dos APIs y observa cómo cambian las respuestas según los controles de seguridad.</p>
+        </div>
+        <div class="mode-card">
+          <span class="mode-label">SERVIDOR ACTUAL</span>
+          <strong id="mode-name">Comprobando…</strong>
+          <span class="mode-address" id="mode-address"></span>
+          <span class="health" id="health-status"><i></i> Comprobando conexión</span>
+        </div>
+      </section>
+
+      <aside class="notice">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <p><strong>Solo datos sintéticos.</strong> La API vulnerable es exclusivamente para pruebas locales: no la expongas a Internet ni la conectes a datos reales.</p>
+      </aside>
+
+      <section class="panel auth-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">01 · IDENTIDAD</p>
+            <h2>Credenciales de prueba</h2>
+          </div>
+          <span class="tag">La API vulnerable no las exige</span>
+        </div>
+        <div class="auth-controls">
+          <label class="field">
+            <span>Rol para la prueba</span>
+            <select id="role">
+              <option value="HR">RR. HH. (HR)</option>
+              <option value="PAYROLL">Nómina (PAYROLL)</option>
+              <option value="ADMIN">Administrador</option>
+              <option value="EMPLOYEE" selected>Empleado (EMP-1001)</option>
+            </select>
+          </label>
+          <label class="field token-field">
+            <span>Token Bearer</span>
+            <input id="token" type="password" autocomplete="off" placeholder="Pega aquí el token de prueba">
+          </label>
+          <button class="button button-quiet" id="demo-token" type="button">Cargar token demo</button>
+        </div>
+        <p class="field-hint">El token solo se mantiene en esta página y se envía a la API local en cada petición. No se guarda.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">02 · RECURSOS HR</p>
+            <h2>Directorio de empleados</h2>
+          </div>
+          <button class="button button-primary" id="load-employees" type="button">Cargar empleados <span aria-hidden="true">↻</span></button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Nombre</th><th>Departamento</th><th>Cargo</th><th>Estado</th></tr></thead>
+            <tbody id="employees"><tr><td class="empty" colspan="5">Pulsa “Cargar empleados” para consultar la API.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="actions-grid">
+          <form id="lookup-form" class="action-card">
+            <div class="action-title"><span class="step">A</span><div><h3>Consultar un perfil</h3><p>Prueba el acceso directo a un empleado.</p></div></div>
+            <div class="inline-form">
+              <input id="lookup-id" aria-label="ID de empleado" value="EMP-1001">
+              <button class="button button-outline" type="submit">Consultar</button>
+            </div>
+          </form>
+          <form id="update-form" class="action-card">
+            <div class="action-title"><span class="step">B</span><div><h3>Editar perfil</h3><p>Cambia solo departamento o cargo.</p></div></div>
+            <div class="form-stack">
+              <input id="update-id" aria-label="ID de empleado a editar" value="EMP-1001">
+              <div class="inline-form">
+                <input id="department" aria-label="Nuevo departamento" placeholder="Nuevo departamento" value="Engineering">
+                <input id="title" aria-label="Nuevo cargo" placeholder="Nuevo cargo" value="Platform Engineer">
+              </div>
+              <button class="button button-outline" type="submit">Guardar cambios permitidos</button>
+            </div>
+          </form>
+          <article class="action-card security-test">
+            <div class="action-title"><span class="step">C</span><div><h3>Probar asignación masiva</h3><p>Intenta cambiar salario y nivel de acceso.</p></div></div>
+            <button class="button button-danger" id="mass-assignment" type="button">Enviar prueba controlada</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">03 · DATOS FINANCIEROS</p>
+            <h2>Consulta de nómina</h2>
+          </div>
+          <span class="tag tag-sensitive">Acceso sensible</span>
+        </div>
+        <form id="payroll-form" class="payroll-controls">
+          <label class="field">
+            <span>Filtrar por empleado <small>(opcional)</small></span>
+            <input id="payroll-id" placeholder="Ej.: EMP-1001">
+          </label>
+          <button class="button button-primary" type="submit">Consultar nómina <span aria-hidden="true">→</span></button>
+        </form>
+      </section>
+
+      <section class="panel owasp-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">04 · OWASP TOP 10</p>
+            <h2>Pruebas de seguridad por control</h2>
+          </div>
+          <span class="tag">Las peticiones afectan solo a los fixtures locales</span>
+        </div>
+        <div class="owasp-grid">
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A01</span><div><h3>Acceso a recibo</h3><p>Consulta el recibo de otro empleado.</p></div></div>
+            <div class="inline-form"><input id="payslip-id" aria-label="ID del recibo" value="EMP-1002"><button class="button button-outline" id="test-a01" type="button">Probar</button></div>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A02</span><div><h3>Alta de empleado</h3><p>Contraseña inicial / activación temporal.</p></div></div>
+            <div class="inline-form"><input id="new-employee-id" aria-label="Nuevo ID de empleado" value="EMP-9001"><button class="button button-outline" id="test-a02" type="button">Crear empleado</button></div>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A03</span><div><h3>Inyección en asistencia</h3><p>Fecha o cadena de prueba SQLi.</p></div></div>
+            <div class="inline-form"><input id="attendance-date" aria-label="Fecha de asistencia" value="' OR 1=1 --"><button class="button button-outline" id="test-a03" type="button">Probar</button></div>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A04</span><div><h3>Aprobación de vacaciones</h3><p>Intenta aprobar la solicitud propia.</p></div></div>
+            <button class="button button-outline" id="test-a04" type="button">Probar autoaprobación</button>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A05</span><div><h3>Error interno</h3><p>Comprueba cabeceras y mensaje del servidor.</p></div></div>
+            <button class="button button-outline" id="test-a05" type="button">Provocar error de prueba</button>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A06</span><div><h3>Versión de PDFKit</h3><p>Compara componente obsoleto y actualizado.</p></div></div>
+            <button class="button button-outline" id="test-a06" type="button">Consultar versión demo</button>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A07</span><div><h3>Límite de inicio de sesión</h3><p>Envía seis intentos inválidos consecutivos.</p></div></div>
+            <button class="button button-outline" id="test-a07" type="button">Probar límite (6 intentos)</button>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A08</span><div><h3>Carga de CV</h3><p>Por defecto se envía un TXT, no un PDF.</p></div></div>
+            <div class="inline-form upload-form"><input id="cv-file" type="file" aria-label="Archivo de CV" accept=".pdf,application/pdf"><button class="button button-outline" id="test-a08" type="button">Probar archivo</button></div>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A09</span><div><h3>Cambio de salario</h3><p>Revisa la respuesta y el log estructurado.</p></div></div>
+            <div class="inline-form"><input id="salary-value" aria-label="Nuevo salario de prueba" type="number" min="1" value="90001"><button class="button button-outline" id="test-a09" type="button">Actualizar</button></div>
+          </article>
+          <article class="owasp-card">
+            <div class="owasp-title"><span class="owasp-id">A10</span><div><h3>Petición de exportación</h3><p>La URL local debe bloquearse en seguro.</p></div></div>
+            <div class="form-stack"><input id="export-url" aria-label="URL para exportación"><button class="button button-outline" id="test-a10" type="button">Probar URL</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel response-panel" aria-live="polite">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">RESULTADO DE LA ÚLTIMA OPERACIÓN</p>
+            <h2 id="result-title">Respuesta de la API</h2>
+          </div>
+          <span id="result-status" class="http-status">Sin peticiones</span>
+        </div>
+        <pre id="response" class="response-body">Las respuestas HTTP y los errores aparecerán aquí.</pre>
+      </section>
+
+      <footer>
+        <span>TalentCorp · Laboratorio educativo de seguridad</span>
+        <span>Datos sintéticos · Solo uso local</span>
+      </footer>
+    </main>
+  </body>
+</html>

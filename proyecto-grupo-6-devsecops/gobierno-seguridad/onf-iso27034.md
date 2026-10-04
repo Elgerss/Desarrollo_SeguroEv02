@@ -1,30 +1,48 @@
 # ONF de seguridad de aplicaciones | Referencia ISO/IEC 27034
 
-Este documento define un **Organizational Normative Framework (ONF) académico y reducido** para TalentCorp API. Sirve para organizar responsabilidades y evidencia durante el ciclo de vida; no declara conformidad ni sustituye la interpretación de las normas vigentes o los procesos corporativos.
+## Estado y propósito
 
-## Política y contexto
+Este documento define un **Organizational Normative Framework (ONF) académico y reducido** para TalentCorp API. Organiza contexto, requisitos, controles de aplicación, evidencia y responsabilidades a lo largo del ciclo de vida, tomando ISO/IEC 27034 como referencia. No afirma conformidad ni certificación: el marco normativo vigente, su terminología y su aplicación deben ser confirmados por la organización y sus especialistas.
 
-- **Activo:** información de personal y de nómina.
-- **Propietario funcional:** responsable de RR. HH. y Nómina, que aprueba finalidades y perfiles de acceso.
-- **Responsable técnico:** equipo de desarrollo, que implementa requisitos y mantiene pruebas reproducibles.
-- **Responsable de seguridad:** revisa riesgos, controles, excepciones y resultados antes de una liberación.
-- **Clasificación:** restringida. Los datos reales requieren controles organizacionales y legales adicionales.
+## Contexto de la aplicación
 
-## Proceso del ciclo de vida
+| Elemento | Definición del laboratorio |
+| --- | --- |
+| Propietario funcional | Responsables de RR. HH. y Nómina; definen finalidades y aprobaciones |
+| Propietario técnico | Equipo de desarrollo; implementa API, dependencias y pruebas |
+| Autoridad de seguridad | Revisa amenazas, controles, excepciones y evidencia de liberación |
+| Activos | Recibos, salarios, perfil de empleados, asistencia, vacaciones, archivos CV, credenciales y eventos de auditoría |
+| Clasificación | Confidencial/restringida en una implantación real; sintética en este repositorio |
+| Límites de confianza | Navegador/API, roles y titulares, almacenamiento, proveedor de archivos, DNS/egress y sistema de registro |
+| Entorno | Dos APIs locales en `127.0.0.1:3000` (intencionalmente vulnerable) y `127.0.0.1:3001` (controles de referencia) |
 
-| Etapa | Actividad de seguridad | Evidencia del proyecto |
+## Gobierno, responsabilidades y riesgo
+
+- El propietario funcional aprueba casos de uso, perfiles de acceso, reglas de aprobación y retención.
+- Desarrollo convierte requisitos en controles preventivos y mantiene pruebas ejecutables.
+- Seguridad valida el modelo de amenazas, analiza dependencias y revisa evidencia independientemente del autor del cambio.
+- Operaciones gestiona secretos, red, almacenamiento, monitorización, parches, respaldo y respuesta a incidentes en una implantación real.
+- Asesoría jurídica y privacidad determinan las obligaciones aplicables; este laboratorio no establece una base legal.
+
+Los riesgos de referencia son acceso indebido a nómina (A01), exposición de credenciales (A02), inyección (A03), autoaprobación (A04), filtración por errores/configuración (A05), componentes desactualizados (A06), fuerza bruta (A07), archivos no confiables (A08), ausencia de trazabilidad salarial (A09) y SSRF/egress (A10). Los controles y criterios de aceptación se trazan en [asc-controles.md](./asc-controles.md).
+
+## Ciclo de vida y evidencia requerida
+
+| Etapa | Actividades normativas | Artefactos/evidencia |
 | --- | --- | --- |
-| Requisitos | Identificar activos, actores, amenazas y obligaciones de privacidad | Este ONF y el manifiesto ético |
-| Diseño | Definir límites de confianza, roles, minimización y validación | Contrato documentado en `README.md` |
-| Implementación | Aplicar controles por defecto y revisión de cambios | `src/seguro/` y `gobierno-seguridad/asc-controles.md` |
-| Verificación | Probar autenticación, autorización, exposición y entradas | `auditoria/test_audit.sh` y respuestas guardadas |
-| Liberación | Revisar evidencia, dependencias, secretos y excepciones | Puerta de revisión propuesta abajo |
-| Operación | Monitorizar, gestionar vulnerabilidades y responder a incidentes | Requisito pendiente de integración en una plataforma real |
+| Requisitos | Identificar actores, datos, propósitos, obligaciones, amenazas y criterios de aceptación | Manifiesto ético, contrato API, historias de abuso y matriz ASC |
+| Diseño | Definir límites de confianza, autenticación, titularidad, segregación, tratamiento de archivos, egress y auditoría | Decisiones de arquitectura y revisión de amenazas |
+| Implementación | Aplicar validación positiva, autorización del lado servidor, hashing, consultas preparadas y configuración segura | Código de `src/seguro/`, versiones fijadas y revisión por pares |
+| Verificación | Ejecutar pruebas negativas y positivas A01–A10 sobre cada variante; revisar salidas y logs | `auditoria/test_audit.sh`, diez capturas HTTP por fase y resultado de pruebas |
+| Liberación | Revisar hallazgos, dependencias, configuración, secretos, almacenamiento y riesgo residual | Aprobación documentada, `npm audit`, análisis SAST/DAST y excepciones |
+| Operación | Revisar accesos, actualizar componentes, monitorizar eventos, gestionar retención, incidentes y cambios | Runbooks, alertas, registros protegidos y revisiones periódicas |
 
-## Puerta de liberación académica
+## Criterios de liberación y excepciones
 
-Una versión candidata no se aprueba si falla una prueba de control, contiene secretos, usa datos reales o carece de propietario para un riesgo alto. Los riesgos aceptados deben tener justificación, responsable y fecha de expiración. Toda excepción se vuelve a evaluar cuando cambian el tratamiento, el entorno o las dependencias.
+La API vulnerable nunca es candidata a producción. Una versión segura no se libera si falla una prueba de control, expone secretos o trazas, acepta una autorización no demostrada o carece de un propietario para un riesgo alto. El equipo analiza falsos positivos y cobertura; una salida `PASS` del script demuestra únicamente el comportamiento de sus casos de prueba, no la seguridad completa.
 
-## Trazabilidad
+Toda excepción debe registrar riesgo, alcance, motivo, responsable que acepta, controles compensatorios, fecha de expiración y plan de cierre. Debe revalidarse tras cambios de datos, roles, dependencias, infraestructura o amenaza. Las credenciales y datos de producción se inyectan desde gestores adecuados; no se incorporan a repositorio ni capturas.
 
-Cada requisito de seguridad debe enlazar a: riesgo o requisito, control implementado, prueba automatizada, resultado revisado y responsable. El equipo actualiza esta documentación en el mismo cambio que modifica comportamiento o controles. La auditoría de este repositorio solo cubre rutas y casos explícitos del laboratorio.
+## Trazabilidad y mantenimiento
+
+Cada requisito se enlaza con activo/riesgo, control ASC, responsable, implementación, prueba automatizada, resultado y decisión de liberación. Cambios de código, dependencias, contratos o tratamiento actualizan esta documentación en el mismo cambio. La evidencia de este ejercicio usa exclusivamente datos sintéticos y no demuestra certificación ISO/IEC 27034 ni conformidad legal.
