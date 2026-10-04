@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 41
+ETag: W/"29-HrjZb0+osuUP2yP3JWv8GMlFceM"
+Date: Sun, 04 Oct 2026 20:47:22 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"data":{"id":"EMP-1001","salary":90001}}
