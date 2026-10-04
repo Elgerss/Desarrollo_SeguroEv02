@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 19
+ETag: W/"13-IR7EpiwPHr6MO74aIr31sF5mtlo"
+Date: Sun, 04 Oct 2026 04:40:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"pdfkit":"0.12.3"}

@@ -1,0 +1,20 @@
+HTTP/1.1 500 Internal Server Error
+X-Powered-By: Express
+Content-Type: text/plain; charset=utf-8
+Content-Length: 1640
+ETag: W/"668-wavIKn6DMnsKs6RL89vim6up6kg"
+Date: Sun, 04 Oct 2026 04:40:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+Error: Demonstration failure at C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\server.js
+    at C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\server.js:137:8
+    at Layer.handle [as handle_request] (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\express\lib\router\index.js:280:10)
+    at SendStream.error (C:\Users\siuir\Documents\GitHub\Desarrollo_SeguroEv02\proyecto-grupo-6-devsecops\src\vulnerable\node_modules\serve-static\index.js:121:7)
+    at SendStream.emit (node:events:508:28)

@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 71
+ETag: W/"47-bUEsIbO5dTeOPzkdEIOJjqSuM6w"
+Date: Sun, 04 Oct 2026 04:40:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"status":"approved","solicitante_id":"HR-001","aprobador_id":"HR-001"}
